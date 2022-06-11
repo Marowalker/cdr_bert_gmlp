@@ -53,22 +53,22 @@ def load_pickle(fileins, case='train'):
         heads = pickle.load(f)
         f.close()
 
-    with open(fi1, 'rb') as f:
+    with open(fi3, 'rb') as f:
         e1s = pickle.load(f)
         f.close()
 
-    with open(fi1, 'rb') as f:
+    with open(fi4, 'rb') as f:
         e2s = pickle.load(f)
         f.close()
 
     if case == 'train':
-        with open(fi1, 'rb') as f:
+        with open(fi5, 'rb') as f:
             labels = pickle.load(f)
             f.close()
         return words, heads, e1s, e2s, labels
 
     else:
-        with open(fi1, 'rb') as f:
+        with open(fi5, 'rb') as f:
             identities = pickle.load(f)
             f.close()
         return words, heads, e1s, e2s, identities

@@ -77,3 +77,4 @@ def mat_mul(hidden_output, e_mask):
     prod = e_mask @ hidden_output
     prod = tf.squeeze(prod, axis=1)
     return prod
+

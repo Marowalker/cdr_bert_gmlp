@@ -5,6 +5,22 @@ from constants import *
 import numpy as np
 from simple_gmlp import gMLPLayer
 import os
+import keras.backend as K
+
+
+def f1_macro(y_true, y_pred):
+    y_pred = K.round(y_pred)
+    tp = K.sum(K.cast(y_true * y_pred, 'float'), axis=0)
+    # tn = K.sum(K.cast((1-y_true)*(1-y_pred), 'float'), axis=0)
+    fp = K.sum(K.cast((1 - y_true) * y_pred, 'float'), axis=0)
+    fn = K.sum(K.cast(y_true * (1 - y_pred), 'float'), axis=0)
+
+    p = tp / (tp + fp + K.epsilon())
+    r = tp / (tp + fn + K.epsilon())
+
+    f1 = 2 * p * r / (p + r + K.epsilon())
+    f1 = tf.where(tf.math.is_nan(f1), tf.zeros_like(f1), f1)
+    return K.mean(f1)
 
 
 class BertgMLPModel:
@@ -59,7 +75,7 @@ class BertgMLPModel:
         # model = tf.keras.Model(inputs=[input_ids, e1_mask, e2_mask], outputs=out)
         self.optimizer = tf.keras.optimizers.Adam(lr=LEARNING_RATE)
 
-        self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', metrics='accuracy')
+        self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', metrics=['accuracy', f1_macro])
         print(self.model.summary())
 
     def _train(self, train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask, train_y):
