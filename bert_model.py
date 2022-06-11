@@ -83,7 +83,7 @@ class BertgMLPModel:
         train_x = get_x(train_x)
         train_x_head_mask, train_x_e1_mask, train_x_e2_mask = get_x_mask(train_x_head_mask, train_x_e1_mask,
                                                                          train_x_e2_mask)
-
+        train_y = tf.keras.utils.to_categorical(train_y)
         self.model.fit([train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask], train_y, validation_split=0.2,
                        batch_size=BATCH_SIZE, epochs=NUM_EPOCH)
 
