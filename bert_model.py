@@ -68,6 +68,10 @@ class BertgMLPModel:
         out = tf.keras.layers.Dense(len(relation), activation='softmax')(out)
         return out
 
+    @staticmethod
+    def f1_score(y_true, y_pred):
+        return f1_macro(y_true, y_pred)
+
     def _add_train_ops(self):
         self.model = tf.keras.Model(inputs=[self.input_ids, self.head_mask, self.e1_mask, self.e2_mask],
                                     outputs=self._bert_layer())
@@ -75,12 +79,8 @@ class BertgMLPModel:
         # model = tf.keras.Model(inputs=[input_ids, e1_mask, e2_mask], outputs=out)
         self.optimizer = tf.keras.optimizers.Adam(lr=LEARNING_RATE)
 
-        self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', metrics=['accuracy', f1_macro])
+        self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', metrics=['accuracy', self.f1_score])
         print(self.model.summary())
-
-    @staticmethod
-    def f1_score(y_true, y_pred):
-        return f1_macro(y_true, y_pred)
 
     def _train(self, train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask, train_y):
 
@@ -89,12 +89,12 @@ class BertgMLPModel:
                                                                          train_x_e2_mask)
         train_y = tf.keras.utils.to_categorical(train_y)
 
-        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='f1_score', patience=3)
+        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_f1_score', patience=3)
 
         model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=TRAINED_MODELS,
             save_weights_only=True,
-            monitor='f1_score',
+            monitor='val_f1_score',
             mode='auto',
             save_best_only=True)
 
