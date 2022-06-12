@@ -34,9 +34,9 @@ END_E1 = tokenizer.encode('</e1>')[1]
 START_E2 = tokenizer.encode('<e2>')[1]
 END_E2 = tokenizer.encode('</e2>')[1]
 
-train_file = RAW_DATA + 'sentence_ref.train.txt'
-dev_file = RAW_DATA + 'sentence_ref.dev.txt'
-test_file = RAW_DATA + 'sentence_ref.test.txt'
+train_file = RAW_DATA + 'sentence_ref_cased.train.txt'
+dev_file = RAW_DATA + 'sentence_ref_cased.dev.txt'
+test_file = RAW_DATA + 'sentence_ref_cased.test.txt'
 
 train_token_pickle = PICKLE_DATA + 'train_x.pkl'
 train_head_mask = PICKLE_DATA + 'train_x_head_mask.pkl'
