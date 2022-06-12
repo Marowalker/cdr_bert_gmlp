@@ -78,6 +78,10 @@ class BertgMLPModel:
         self.model.compile(optimizer=self.optimizer, loss='binary_crossentropy', metrics=['accuracy', f1_macro])
         print(self.model.summary())
 
+    @staticmethod
+    def f1_score(y_true, y_pred):
+        return f1_macro(y_true, y_pred)
+
     def _train(self, train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask, train_y):
 
         train_x = get_x(train_x)
@@ -85,15 +89,17 @@ class BertgMLPModel:
                                                                          train_x_e2_mask)
         train_y = tf.keras.utils.to_categorical(train_y)
 
+        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='f1_score', patience=3)
+
         model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=TRAINED_MODELS,
             save_weights_only=True,
-            monitor=f1_macro,
+            monitor='f1_score',
             mode='auto',
             save_best_only=True)
 
         self.model.fit([train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask], train_y, validation_split=0.2,
-                       batch_size=BATCH_SIZE, epochs=NUM_EPOCH, callbacks=[model_checkpoint_callback])
+                       batch_size=BATCH_SIZE, epochs=NUM_EPOCH, callbacks=[early_stopping, model_checkpoint_callback])
 
         self.model.save_weights(TRAINED_MODELS)
 
