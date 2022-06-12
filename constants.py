@@ -1,11 +1,11 @@
-from transformers import TFBertModel, BertTokenizer
+from transformers import TFBertModel, BertTokenizer, BertModel
 
 
 MAX_SEN_LEN = 300
 BATCH_SIZE = 16
 DROPOUT = 0.1
-LEARNING_RATE = 2e-5
-NUM_EPOCH = 8
+LEARNING_RATE = 1e-6
+NUM_EPOCH = 10
 EMB_SIZE = 768
 REBUILD = 1  # 1 to rebuild, 0 to load
 REMAKE = 1  # 1 to train model again, 0 otherwise
@@ -15,12 +15,15 @@ relation = ['CID', 'NONE']
 DATA = 'data/'
 RAW_DATA = DATA + 'raw/'
 PICKLE_DATA = DATA + 'pickle/'
-BIOBERT = DATA + 'biobert_v1.0_pubmed_pmc'
+BIOBERT = DATA + 'biobert_v1.1_pubmed_pmc'
 
 TRAINED_MODELS = DATA + 'trained_models/'
 
-encoder = TFBertModel.from_pretrained("bert-base-uncased")
-tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+# encoder = TFBertModel.from_pretrained("bert-base-uncased")
+# tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
+encoder = TFBertModel.from_pretrained("dmis-lab/biobert-base-cased-v1.2", from_pt=True)
+tokenizer = BertTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.2")
 
 ADDITIONAL_SPECIAL_TOKENS = ["<e1>", "</e1>", "<e2>", "</e2>"]
 

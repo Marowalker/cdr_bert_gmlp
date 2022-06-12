@@ -84,8 +84,16 @@ class BertgMLPModel:
         train_x_head_mask, train_x_e1_mask, train_x_e2_mask = get_x_mask(train_x_head_mask, train_x_e1_mask,
                                                                          train_x_e2_mask)
         train_y = tf.keras.utils.to_categorical(train_y)
+
+        model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=TRAINED_MODELS,
+            save_weights_only=True,
+            monitor=f1_macro,
+            mode='auto',
+            save_best_only=True)
+
         self.model.fit([train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask], train_y, validation_split=0.2,
-                       batch_size=BATCH_SIZE, epochs=NUM_EPOCH)
+                       batch_size=BATCH_SIZE, epochs=NUM_EPOCH, callbacks=[model_checkpoint_callback])
 
         self.model.save_weights(TRAINED_MODELS)
 

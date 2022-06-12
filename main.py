@@ -23,7 +23,7 @@ def main():
 
     print('Data obtained with size:', len(train_y))
 
-    model = BertgMLPModel(encoder, depth=4)
+    model = BertgMLPModel(encoder, depth=10)
     model.build(train_x, train_x_head, train_x_e1, train_x_e2, train_y)
     y_pred = model.predict(test_x, test_x_head, test_x_e1, test_x_e2)
 
