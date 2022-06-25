@@ -9,9 +9,9 @@ def make_pickle(fileins, fileouts, case='train'):
     if not os.path.exists(PICKLE_DATA):
         os.makedirs(PICKLE_DATA)
 
-    words, heads, e1s, e2s, identities, labels = parse_all(fileins)
+    words, heads, e1s, e2s, identities, labels, chems, dis = parse_all(fileins)
 
-    fo1, fo2, fo3, fo4, fo5 = fileouts
+    fo1, fo2, fo3, fo4, fo5, fo6, fo7 = fileouts
 
     with open(fo1, 'wb') as f:
         pickle.dump(words, f)
@@ -29,21 +29,29 @@ def make_pickle(fileins, fileouts, case='train'):
         pickle.dump(e2s, f)
         f.close()
 
+    with open(fo6, 'wb') as f:
+        pickle.dump(chems, f)
+        f.close()
+
+    with open(fo7, 'wb') as f:
+        pickle.dump(dis, f)
+        f.close()
+
     if case == 'train':
         with open(fo5, 'wb') as f:
             pickle.dump(labels, f)
             f.close()
 
-        return words, heads, e1s, e2s, labels
+        return words, heads, e1s, e2s, labels, chems, dis
     else:
         with open(fo5, 'wb') as f:
             pickle.dump(identities, f)
             f.close()
-        return words, heads, e1s, e2s, identities
+        return words, heads, e1s, e2s, identities, chems, dis
 
 
 def load_pickle(fileins, case='train'):
-    fi1, fi2, fi3, fi4, fi5 = fileins
+    fi1, fi2, fi3, fi4, fi5, fi6, fi7 = fileins
 
     with open(fi1, 'rb') as f:
         words = pickle.load(f)
@@ -61,17 +69,25 @@ def load_pickle(fileins, case='train'):
         e2s = pickle.load(f)
         f.close()
 
+    with open(fi6, 'rb') as f:
+        chems = pickle.load(f)
+        f.close()
+
+    with open(fi7, 'rb') as f:
+        dis = pickle.load(f)
+        f.close()
+
     if case == 'train':
         with open(fi5, 'rb') as f:
             labels = pickle.load(f)
             f.close()
-        return words, heads, e1s, e2s, labels
+        return words, heads, e1s, e2s, labels, chems, dis
 
     else:
         with open(fi5, 'rb') as f:
             identities = pickle.load(f)
             f.close()
-        return words, heads, e1s, e2s, identities
+        return words, heads, e1s, e2s, identities, chems, dis
 
 
 def get_x(train_x):

@@ -1,5 +1,21 @@
 from constants import *
 import tensorflow as tf
+from collections import defaultdict
+
+
+def make_kb_vocab(infile):
+    file = open(infile)
+    lines = file.readlines()
+    lines = [line.strip() for line in lines]
+    # raw_vocab = defaultdict()
+    id_vocab = defaultdict()
+    for idx, line in enumerate(lines):
+        if idx != 0:
+            pairs = line.split('\t')
+            name, name_id = pairs[0], pairs[1]
+            # raw_vocab[name_id] = name
+            id_vocab[name_id] = idx
+    return id_vocab
 
 
 def parse_all(fileins):
@@ -16,6 +32,12 @@ def parse_all(fileins):
     all_identities = []
     all_labels = []
     pmid = ''
+    all_chems = []
+    all_dis = []
+
+    chem_vocab = make_kb_vocab(DATA + 'chemical2id.txt')
+    dis_vocab = make_kb_vocab(DATA + 'disease2id.txt')
+
     for line in all_lines:
         l = line.strip().split()
         if len(l) == 1:
@@ -24,6 +46,14 @@ def parse_all(fileins):
             pair = l[0]
             label = l[1]
             if label:
+                chem, dis = pair.split('_')
+
+                chem_idx = chem_vocab[chem]
+                dis_idx = dis_vocab[dis]
+
+                all_chems.append([chem_idx])
+                all_dis.append([dis_idx])
+
                 lb = relation.index(label)
 
                 all_labels.append(lb)
@@ -68,7 +98,7 @@ def parse_all(fileins):
             m2[i] = 1 / ((t[3] - 3) - (t[2] - 2))
         all_e2_mask.append(m2)
 
-    return all_words, all_head_mask, all_e1_mask, all_e2_mask, all_identities, all_labels
+    return all_words, all_head_mask, all_e1_mask, all_e2_mask, all_identities, all_labels, all_chems, all_dis
 
 
 def mat_mul(hidden_output, e_mask):
@@ -77,4 +107,3 @@ def mat_mul(hidden_output, e_mask):
     prod = e_mask @ hidden_output
     prod = tf.squeeze(prod, axis=1)
     return prod
-

@@ -15,15 +15,16 @@ relation = ['CID', 'NONE']
 DATA = 'data/'
 RAW_DATA = DATA + 'raw/'
 PICKLE_DATA = DATA + 'pickle/'
-BIOBERT = DATA + 'biobert_v1.1_pubmed_pmc'
 
+EMBEDDING_CHEM = DATA + 'embeddings/chemical_embeddings768.pkl'
+EMBEDDING_DIS = DATA + 'embeddings/disease_embeddings768.pkl'
 TRAINED_MODELS = DATA + 'trained_models/'
 
 # encoder = TFBertModel.from_pretrained("bert-base-uncased")
 # tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 
-encoder = TFBertModel.from_pretrained("dmis-lab/biobert-base-cased-v1.2", from_pt=True)
-tokenizer = BertTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.2")
+encoder = TFBertModel.from_pretrained("dmis-lab/biobert-v1.1", from_pt=True)
+tokenizer = BertTokenizer.from_pretrained("dmis-lab/biobert-v1.1")
 
 ADDITIONAL_SPECIAL_TOKENS = ["<e1>", "</e1>", "<e2>", "</e2>"]
 
@@ -43,9 +44,14 @@ train_head_mask = PICKLE_DATA + 'train_x_head_mask.pkl'
 train_e1_mask = PICKLE_DATA + 'train_x_e1_mask.pkl'
 train_e2_mask = PICKLE_DATA + 'train_x_e2_mask.pkl'
 train_labels = PICKLE_DATA + 'train_labels.pkl'
+train_chemicals = PICKLE_DATA + 'train_chemicals.pkl'
+train_disease = PICKLE_DATA + 'train_disease.pkl'
 
 test_token_pickle = PICKLE_DATA + 'test_x.pkl'
 test_head_mask = PICKLE_DATA + 'test_x_head_mask.pkl'
 test_e1_mask = PICKLE_DATA + 'test_x_e1_mask.pkl'
 test_e2_mask = PICKLE_DATA + 'test_x_e2_mask.pkl'
 test_identities = PICKLE_DATA + 'test_identities.pkl'
+test_chemicals = PICKLE_DATA + 'test_chemicals.pkl'
+test_disease = PICKLE_DATA + 'test_disease.pkl'
+
