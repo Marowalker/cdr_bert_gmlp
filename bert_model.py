@@ -182,6 +182,8 @@ class BertgMLPModel:
         # test_x_e2_mask = get_x(test_x_e2_mask)
         test_x_head_mask, test_x_e1_mask, test_x_e2_mask = get_x_mask(test_x_head_mask, test_x_e1_mask,
                                                                       test_x_e2_mask)
+        test_chem = tf.constant(test_chem)
+        test_dis = tf.constant(test_dis)
         pred = self.model.predict([test_x, test_x_head_mask, test_x_e1_mask, test_x_e2_mask, test_chem, test_dis])
         # pred = self.model.predict([test_x_e1_mask, test_x_e2_mask, test_chem, test_dis])
 
