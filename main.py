@@ -20,13 +20,21 @@ def main():
         train_x, train_x_head, train_x_e1, train_x_e2, train_y, train_chems, train_dis = make_pickle(train_in,
                                                                                                      train_out,
                                                                                                      case='train')
+        # train_x, train_x_e1, train_x_e2, train_y, train_chems, train_dis = make_pickle(train_in,
+        #                                                                                train_out,
+        #                                                                                case='train')
         test_x, test_x_head, test_x_e1, test_x_e2, identities, test_chems, test_dis = make_pickle(test_in, test_out,
                                                                                                   case='test')
+        # test_x, test_x_e1, test_x_e2, identities, test_chems, test_dis = make_pickle(test_in, test_out,
+        #                                                                              case='test')
     else:
         print('Load data...')
         train_x, train_x_head, train_x_e1, train_x_e2, train_y, train_chems, train_dis = load_pickle(train_out,
                                                                                                      case='train')
         test_x, test_x_head, test_x_e1, test_x_e2, identities, test_chems, test_dis = load_pickle(test_out, case='test')
+        # train_x, train_x_e1, train_x_e2, train_y, train_chems, train_dis = load_pickle(train_out,
+        #                                                                                case='train')
+        # test_x, test_x_e1, test_x_e2, identities, test_chems, test_dis = load_pickle(test_out, case='test')
 
     print('Data obtained with size:', len(train_y))
 
@@ -38,9 +46,11 @@ def main():
         dis_emb = pickle.load(f)
         f.close()
 
-    model = BertgMLPModel(encoder, depth=5, chem_emb=chem_emb, dis_emb=dis_emb)
-    model.build(train_x, train_x_head, train_x_e1, train_x_e2, train_y)
-    y_pred = model.predict(test_x, test_x_head, test_x_e1, test_x_e2)
+    model = BertgMLPModel(encoder, depth=1, chem_emb=chem_emb, dis_emb=dis_emb)
+    model.build(train_x, train_x_head, train_x_e1, train_x_e2, train_y, train_chems, train_dis)
+    y_pred = model.predict(test_x, test_x_head, test_x_e1, test_x_e2, train_chems, train_dis)
+    # model.build(train_x, train_x_e1, train_x_e2, train_y, train_chems, train_dis)
+    # y_pred = model.predict(test_x, test_x_e1, test_x_e2, test_chems, test_dis)
 
     answer = {}
 
@@ -53,7 +63,7 @@ def main():
                 answer[identities[i][0]].append(identities[i][1])
 
     print(
-            'result: abstract: ', evaluate_bc5(answer)
+        'result: abstract: ', evaluate_bc5(answer)
     )
 
 

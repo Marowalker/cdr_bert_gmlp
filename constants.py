@@ -4,8 +4,8 @@ from transformers import TFBertModel, BertTokenizer, BertModel
 MAX_SEN_LEN = 300
 BATCH_SIZE = 16
 DROPOUT = 0.1
-LEARNING_RATE = 1e-6
-NUM_EPOCH = 10
+LEARNING_RATE = 2e-5
+NUM_EPOCH = 8
 EMB_SIZE = 768
 REBUILD = 1  # 1 to rebuild, 0 to load
 REMAKE = 1  # 1 to train model again, 0 otherwise
@@ -35,9 +35,9 @@ END_E1 = tokenizer.encode('</e1>')[1]
 START_E2 = tokenizer.encode('<e2>')[1]
 END_E2 = tokenizer.encode('</e2>')[1]
 
-train_file = RAW_DATA + 'sentence_ref_cased.train.txt'
-dev_file = RAW_DATA + 'sentence_ref_cased.dev.txt'
-test_file = RAW_DATA + 'sentence_ref_cased.test.txt'
+train_file = RAW_DATA + 'sentence_ref.train.txt'
+dev_file = RAW_DATA + 'sentence_ref.dev.txt'
+test_file = RAW_DATA + 'sentence_ref.test.txt'
 
 train_token_pickle = PICKLE_DATA + 'train_x.pkl'
 train_head_mask = PICKLE_DATA + 'train_x_head_mask.pkl'

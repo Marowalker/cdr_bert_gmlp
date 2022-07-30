@@ -10,6 +10,7 @@ def make_pickle(fileins, fileouts, case='train'):
         os.makedirs(PICKLE_DATA)
 
     words, heads, e1s, e2s, identities, labels, chems, dis = parse_all(fileins)
+    # words, e1s, e2s, identities, labels, chems, dis = parse_all(fileins)
 
     fo1, fo2, fo3, fo4, fo5, fo6, fo7 = fileouts
 
@@ -43,11 +44,13 @@ def make_pickle(fileins, fileouts, case='train'):
             f.close()
 
         return words, heads, e1s, e2s, labels, chems, dis
+        # return words, e1s, e2s, labels, chems, dis
     else:
         with open(fo5, 'wb') as f:
             pickle.dump(identities, f)
             f.close()
         return words, heads, e1s, e2s, identities, chems, dis
+        # return words, e1s, e2s, identities, chems, dis
 
 
 def load_pickle(fileins, case='train'):
@@ -82,16 +85,18 @@ def load_pickle(fileins, case='train'):
             labels = pickle.load(f)
             f.close()
         return words, heads, e1s, e2s, labels, chems, dis
+        # return words, e1s, e2s, labels, chems, dis
 
     else:
         with open(fi5, 'rb') as f:
             identities = pickle.load(f)
             f.close()
         return words, heads, e1s, e2s, identities, chems, dis
+        # return words, e1s, e2s, identities, chems, dis
 
 
-def get_x(train_x):
-    train_x = pad_sequences(train_x, maxlen=MAX_SEN_LEN, padding='post')
+def get_x(train_x, max_length=MAX_SEN_LEN):
+    train_x = pad_sequences(train_x, maxlen=max_length, padding='post')
     train_x = tf.constant(train_x)
     return train_x
 
@@ -102,3 +107,4 @@ def get_x_mask(train_x_head_mask, train_x_e1_mask, train_x_e2_mask):
     train_x_e2_mask = tf.constant(train_x_e2_mask)
 
     return train_x_head_mask, train_x_e1_mask, train_x_e2_mask
+

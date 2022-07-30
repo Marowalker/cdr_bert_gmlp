@@ -62,6 +62,22 @@ def parse_all(fileins):
                 token_ids = tokenizer.encode(joint_sdp)
                 all_words.append(token_ids)
 
+                start_e1 = token_ids.index(START_E1)
+                end_e1 = token_ids.index(END_E1)
+                start_e2 = token_ids.index(START_E2)
+                end_e2 = token_ids.index(END_E2)
+
+                e1_idx, e2_idx = [], []
+
+                for idx, tok in enumerate(token_ids):
+                    if start_e1 < idx < end_e1:
+                        e1_idx.append(idx)
+                    if start_e2 < idx < end_e2:
+                        e2_idx.append(idx)
+
+                # all_e1_mask.append(e1_idx)
+                # all_e2_mask.append(e2_idx)
+
                 e1_ids, e2_ids, e1_ide, e2_ide = None, None, None, None
                 for i in range(len(token_ids)):
                     if token_ids[i] == START_E1:
@@ -99,6 +115,7 @@ def parse_all(fileins):
         all_e2_mask.append(m2)
 
     return all_words, all_head_mask, all_e1_mask, all_e2_mask, all_identities, all_labels, all_chems, all_dis
+    # return all_words, all_e1_mask, all_e2_mask, all_identities, all_labels, all_chems, all_dis
 
 
 def mat_mul(hidden_output, e_mask):
