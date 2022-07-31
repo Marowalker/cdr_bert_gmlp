@@ -48,7 +48,7 @@ def main():
 
     model = BertgMLPModel(encoder, depth=1, chem_emb=chem_emb, dis_emb=dis_emb)
     model.build(train_x, train_x_head, train_x_e1, train_x_e2, train_y, train_chems, train_dis)
-    y_pred = model.predict(test_x, test_x_head, test_x_e1, test_x_e2, train_chems, train_dis)
+    y_pred = model.predict(test_x, test_x_head, test_x_e1, test_x_e2, test_chems, test_dis)
     # model.build(train_x, train_x_e1, train_x_e2, train_y, train_chems, train_dis)
     # y_pred = model.predict(test_x, test_x_e1, test_x_e2, test_chems, test_dis)
 
