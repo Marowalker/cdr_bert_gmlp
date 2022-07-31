@@ -142,13 +142,13 @@ class BertgMLPModel:
         train_chem = tf.constant(train_chem)
         train_dis = tf.constant(train_dis)
 
-        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_f1_score', patience=3)
+        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_f1_score', mode='max', patience=3)
 
         model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=TRAINED_MODELS,
             save_weights_only=True,
             monitor='val_f1_score',
-            mode='auto',
+            mode='max',
             save_best_only=True)
 
         self.model.fit([train_x, train_x_head_mask, train_x_e1_mask, train_x_e2_mask, train_chem, train_dis], train_y,
